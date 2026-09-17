@@ -1,4 +1,4 @@
-# VITRide
+<img width="591" height="386" alt="Screenshot 2026-09-17 at 11 49 27 PM" src="https://github.com/user-attachments/assets/1bee5735-b110-4cb0-8b8a-45ac55e7df3e" /># VITRide
 
 **VITRide** is a command-line Java application for VIT students to find and share rides to common destinations. It matches students based on **pickup location, destination, date, and overlapping travel time**.
 
@@ -17,6 +17,10 @@ The system also manages ride seats, passengers, driver details, car details, and
 * View ride members and driver/car details
 * Cancel, complete, and remove rides
 * Local file-based data persistence
+
+---
+
+## SCREENSHOTS
 
 ---
 
