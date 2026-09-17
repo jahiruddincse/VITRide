@@ -6,7 +6,7 @@ The system matches students based on their **pickup location, destination, trave
 
 ---
 
-## 🚕 Problem Statement
+## Problem Statement
 
 Students frequently travel between the VIT campus and nearby locations. Booking a cab individually can increase the cost, while finding other students traveling at a similar time and route is difficult.
 
@@ -23,19 +23,19 @@ The project demonstrates how **Object-Oriented Programming, collections, file ha
 
 ---
 
-## ✨ Features
+## Features
 
-* 👤 **Student Registration**
+*  **Student Registration**
 
   * Add students to the system
   * Store student information locally
 
-* 🚕 **Ride Creation**
+*  **Ride Creation**
 
   * Create a ride with pickup location
   * Specify destination, date, time, and fare
 
-* 🔎 **Ride Matching**
+*  **Ride Matching**
 
   * Match rides using:
 
@@ -44,35 +44,70 @@ The project demonstrates how **Object-Oriented Programming, collections, file ha
     * Date
     * Departure time
 
-* ⏱️ **30-Minute Time Window**
+*  **30-Minute Time Window**
 
   * Rides are considered compatible when their departure times differ by no more than 30 minutes.
 
-* 👥 **Shared Ride Groups**
+*  **Shared Ride Groups**
 
   * Students can join compatible rides
   * Group members can be viewed
 
-* 💰 **Automatic Fare Splitting**
+*  **Automatic Fare Splitting**
 
   * Total fare is divided equally among group members.
 
-* ↩️ **Leave Ride**
+*  **Leave Ride**
 
   * Members can leave a shared ride.
 
-* 💾 **Local Data Persistence**
+*  **Local Data Persistence**
 
   * Student and ride information is stored in text files.
   * Previously saved data is loaded when the application starts.
 
-* ⚠️ **Exception Handling**
+*  **Exception Handling**
 
   * Custom exception handling is used for invalid ride-related operations.
 
 ---
+##  Screenshots
 
-## 🧠 Matching Logic
+Screenshots of the application can be added below.
+
+### Main Menu
+
+```text
+Add screenshot here
+```
+
+### Ride Creation
+
+```text
+Add screenshot here
+```
+
+### Ride Matching
+
+```text
+Add screenshot here
+```
+
+### Group & Fare Splitting
+
+```text
+Add screenshot here
+```
+
+### Testing
+
+```text
+Add screenshot here
+```
+
+---
+
+##  Matching Logic
 
 A ride is considered a match when the following conditions are satisfied:
 
@@ -235,7 +270,7 @@ VITRide/
 
 ---
 
-## 📋 Application Menu
+##  Application Menu
 
 When the program starts, the following menu is displayed:
 
@@ -256,7 +291,7 @@ Choice:
 
 ---
 
-## 🚀 Getting Started
+##  Getting Started
 
 ### 1. Install Java
 
@@ -311,7 +346,7 @@ The application will start directly in the terminal.
 
 ---
 
-## 🧪 Testing
+##  Testing
 
 VITRide includes a test class for validating the core matching functionality.
 
@@ -344,7 +379,7 @@ The tests verify important functionality including:
 
 ---
 
-## 💾 Data Storage
+##  Data Storage
 
 VITRide does not require a database.
 
@@ -362,7 +397,7 @@ This keeps the project lightweight and demonstrates **Java file handling** witho
 
 ---
 
-## 🧩 Core Java Concepts Demonstrated
+##  Core Java Concepts Demonstrated
 
 The project applies several concepts from **Object-Oriented Programming and Java programming**:
 
@@ -396,7 +431,7 @@ Different responsibilities are separated into individual classes instead of plac
 
 ---
 
-## 🔄 Application Workflow
+##  Application Workflow
 
 ```text
 Start
@@ -444,7 +479,7 @@ Display Main Menu
 
 ---
 
-## 🔐 Design Decisions
+##  Design Decisions
 
 ### Why Command Line?
 
@@ -468,43 +503,7 @@ Separating responsibilities improves readability, maintainability and demonstrat
 
 ---
 
-## 📸 Screenshots
-
-Screenshots of the application can be added below.
-
-### Main Menu
-
-```text
-Add screenshot here
-```
-
-### Ride Creation
-
-```text
-Add screenshot here
-```
-
-### Ride Matching
-
-```text
-Add screenshot here
-```
-
-### Group & Fare Splitting
-
-```text
-Add screenshot here
-```
-
-### Testing
-
-```text
-Add screenshot here
-```
-
----
-
-## 🔮 Future Improvements
+## Future Improvements
 
 Possible extensions include:
 
