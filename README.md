@@ -1,47 +1,46 @@
 # VITRide — Campus Cab-Sharing Matcher by Time Window
 
-A command-line Java application that helps VIT students share cab rides to common destinations (airport, railway station, city) by matching their available time windows. Students register their travel window; the system finds who else is going to the same place at an overlapping time.
+A command-line Java application that helps VIT students share cab rides to common destinations (airport, railway station, city) by matching their available time windows. Students register their travel window; the system finds who else is going to the same place at an overlapping time and shows the driver, car, and all ride members.
 
 ---
 
 ## Problem Being Solved
 
-VIT Bhopal is located outside the city. When students travel home or to the airport or railway station, they book separate cabs — wasting money and seats. There is no shared system to find others going the same way at the same time.
+VIT Bhopal is located outside the city. Students travelling to the airport, railway station, or city independently book separate cabs — wasting money and seats. There is no system to find others going the same way at the same time.
 
-VITRide solves this by letting students post their travel window and finding others whose windows overlap, so they can share a cab.
+VITRide lets students post their travel window, find matches with time-window intersection logic, and share cabs — with full driver and car details shown instantly on joining.
 
 ---
 
 ## Main Features
 
-- Register students
-- Create a ride with pickup, destination, date, time window, and available seats
-- Find rides that match your destination, date, and time window (time-interval intersection)
-- Join a ride as a passenger (seat count decreases automatically)
-- Leave a ride (seat count restored)
-- View passengers of a ride
-- Cancel a ride (owner only)
-- Mark a ride as completed (owner only)
-- Remove a ride (owner only)
-- Full data persistence — all data saves to local text files and reloads automatically on next startup
+- Register students with contact number
+- Create a ride with pickup, destination, date, time window, driver name and contact, car name and number plate, and cab type (4-seater or 6-seater)
+- Seat count automatically reserves 1 for the driver; remaining seats are for passengers
+- Search and find rides that match your destination, date, and overlapping time window
+- Match result shows driver details, car details, and common time window
+- Join a ride — see driver details, car details, and all ride members instantly
+- Leave a ride (seat restored)
+- View all members of a ride including owner and passengers
+- Cancel, complete, or remove a ride (owner only)
+- Full data persistence — saves to local text files; reloads on next startup
 
 ---
 
 ## Technologies Used
 
-- Java 11 or higher (Core Java only — no external libraries)
-- `java.time.LocalDate`, `java.time.LocalTime` — date and time handling
-- `java.util.HashMap`, `java.util.ArrayList` — data storage
-- `java.util.stream` — filtering and sorting ride matches
-- `java.util.Iterator` — passenger list traversal
-- `java.nio.file` (NIO.2) — file read/write persistence
-- Custom exception (`InvalidRideException`) with `throw` and `throws`
+- Java 8 or higher (Core Java only — no external libraries)
+- `java.io.BufferedWriter`, `java.io.BufferedReader`, `java.io.FileWriter`, `java.io.FileReader` — file persistence
+- `java.util.ArrayList` — in-memory data storage
+- `java.util.Scanner` — console input
+- Custom exception `RideException` with `throw` and `throws`
+- Manual time parsing — converts HH:MM strings to integer minutes for interval arithmetic
 
 ---
 
 ## Required Java Version
 
-Java 11 or higher.
+Java 8 or higher.
 
 Verify:
 
@@ -54,9 +53,9 @@ javac -version
 
 ## Environment Setup
 
-No installation beyond JDK is required. No build tools, no frameworks, no databases.
+No installation beyond JDK is needed. No build tools, no frameworks, no databases.
 
-**macOS / Linux:**
+**macOS:**
 
 ```bash
 brew install openjdk@17
@@ -70,7 +69,7 @@ Download and install from: https://adoptium.net
 
 ---
 
-## Installation and Setup
+## Installation
 
 ```bash
 git clone https://github.com/jahiruddincse/VITRide.git
@@ -81,14 +80,14 @@ cd VITRide
 
 ## Compile
 
-Run this from inside the `VITRide` folder:
+Run from inside the `VITRide` folder:
 
 ```bash
 mkdir -p out
 javac -d out src/*.java
 ```
 
-No errors means compilation succeeded.
+No output means success.
 
 ---
 
@@ -101,25 +100,25 @@ java -cp out Main
 You will see:
 
 ```
-========== VITRIDE ==========
-1.  Add Student
-2.  View Students
-3.  Create Ride
-4.  View Rides
-5.  Find Ride Match
-6.  Join Ride
-7.  Leave Ride
-8.  View Passengers
-9.  Cancel Ride
-10. Complete Ride
-11. Remove Ride
-12. Save Data
-13. Exit
-==============================
+===== VITRIDE =====
+1. Add Student
+2. View Students
+3. Search Student
+4. Create Ride
+5. View Rides
+6. Find Ride Match
+7. Join Ride
+8. Leave Ride
+9. View Ride Members
+10. Cancel Ride
+11. Complete Ride
+12. Remove Ride
+13. Save
+14. Exit
 Choice:
 ```
 
-Type a number and press Enter to use any feature. Data is saved automatically after every add/change. On next startup, all data reloads automatically.
+Data saves automatically after every change. On the next startup, all previous data reloads automatically.
 
 ---
 
@@ -127,27 +126,22 @@ Type a number and press Enter to use any feature. Data is saved automatically af
 
 ```bash
 mkdir -p testout
-javac -d testout src/*.java tests/RideMatcherTest.java
-java -cp testout RideMatcherTest
+javac -d testout src/*.java tests/MatcherTest.java
+java -cp testout MatcherTest
 ```
 
 Expected output:
 
 ```
-All RideMatcher tests passed.
+All tests passed.
 ```
 
-The test verifies four cases:
-1. Overlapping time windows → matched correctly
-2. Non-overlapping windows → not matched
-3. Same time but different destination → not matched
-4. Same time and destination but different date → not matched
-
----
-
-## Testing Instructions
-
-The test class is `tests/RideMatcherTest.java`. It tests `RideMatcher.matches()` directly with known inputs and expected outputs, and throws `AssertionError` with a message if any case fails.
+The test covers five cases:
+1. Overlapping time windows → match detected
+2. Common time window is computed correctly (17:20 - 17:30)
+3. Non-overlapping time windows → no match
+4. Same time but different destination → no match
+5. Same time and destination but different date → no match
 
 ---
 
@@ -155,53 +149,56 @@ The test class is `tests/RideMatcherTest.java`. It tests `RideMatcher.matches()`
 
 ```
 VITRide/
-├── README.md                      <- This file
-├── statement.md                   <- Problem statement
+├── README.md
+├── statement.md
 ├── .gitignore
 ├── src/
-│   ├── Main.java                  <- Entry point and menu
-│   ├── Student.java               <- Student entity
-│   ├── Ride.java                  <- Ride entity with passenger management
-│   ├── RideMatcher.java           <- Time-window intersection logic
-│   ├── RideManager.java           <- Business logic and operations
-│   ├── FileManager.java           <- NIO.2 file save/load
-│   └── InvalidRideException.java  <- Custom checked exception
+│   ├── Main.java           <- Entry point and menu (14 options)
+│   ├── Student.java        <- Student entity (id, name, branch, contact)
+│   ├── Ride.java           <- Ride entity (driver, car, seats, passengers)
+│   ├── Matcher.java        <- Time-window intersection logic
+│   ├── Rides.java          <- All business operations
+│   ├── Data.java           <- File save/load using BufferedWriter/Reader
+│   └── RideException.java  <- Custom checked exception
 ├── tests/
-│   └── RideMatcherTest.java       <- 4-case unit test
-└── data/                          <- Auto-created at runtime
+│   └── MatcherTest.java    <- 5-case unit test for Matcher
+└── data/                   <- Auto-created at runtime
     ├── students.txt
     └── rides.txt
 ```
 
 ---
 
-## Matching Logic Explained
+## Matching Logic
 
-When a student searches for a ride, they enter:
-- Pickup location
-- Destination
-- Date
-- Their available start time and end time (travel window)
+When a student searches for a ride, they enter pickup, destination, date, and their available time window (HH:MM to HH:MM).
 
-The system creates a temporary search ride from this input and runs `RideMatcher.matches()` against every active ride in the system.
-
-`RideMatcher.matches()` computes the **time-window intersection**:
+`Matcher.match()` converts both time strings to integer minutes and computes the intersection:
 
 ```
-commonStart = max(rideA.startTime, rideB.startTime)
-commonEnd   = min(rideA.endTime,   rideB.endTime)
-match = commonStart < commonEnd   (at least 1 minute overlap)
+commonStart = max(rideA.start, rideB.start)
+commonEnd   = min(rideA.end,   rideB.end)
+match       = commonStart < commonEnd
 ```
 
-Rides are also filtered by:
+A match is returned only when:
 - Same date
 - Same pickup (case-insensitive)
 - Same destination (case-insensitive)
-- At least 1 seat available
-- Status must be ACTIVE
-- Cannot match your own ride
+- Both rides are ACTIVE
+- The found ride has at least 1 seat available
+- Not the same owner
 
-Results are sorted by start time (earliest first).
+---
+
+## Seat Calculation
+
+| Car Type | Total Seats | Driver | Student Seats |
+|----------|------------|--------|---------------|
+| 4 Seater | 4 | 1 | 3 |
+| 6 Seater | 6 | 1 | 5 |
+
+Each time a student joins, the available seat count decreases by 1. When they leave, it increases by 1.
 
 ---
 
@@ -211,83 +208,80 @@ Results are sorted by start time (earliest first).
 
 ```
 Choice: 1
-Student ID: S1  |  Name: Arjun  |  Branch: CSE
+Student ID: S1 | Name: Arjun | Branch: CSE | Contact: 9876540001
 
 Choice: 1
-Student ID: S2  |  Name: Priya  |  Branch: ECE
+Student ID: S2 | Name: Priya | Branch: ECE | Contact: 9876540002
 ```
 
-### 2. S1 posts a ride
+### 2. S1 creates a ride
 
 ```
-Choice: 3
+Choice: 4
 Ride ID: R1
-Owner Student ID: S1
+Owner ID: S1
 Pickup: VIT Bhopal
 Destination: Bhopal Airport
-Date: 2026-09-20
-Start Time: 17:00
-End Time: 17:30
-Available Passenger Seats: 2
-→ Ride created.
+Date: 20-09-2026
+Start: 17:00 | End: 17:30
+Driver Name: Aman | Driver Contact: 9876543210
+Car: Swift | Car No: MP09AB1234
+Car Type (4/6): 4
+→ Ride created. Available student seats: 3
 ```
 
-### 3. S2 searches for a match
+### 3. S2 finds a match
 
 ```
-Choice: 5
-Your Student ID: S2
-Pickup: VIT Bhopal
-Destination: Bhopal Airport
-Date: 2026-09-20
-Your Start Time: 17:20
-Your End Time: 17:50
-```
+Choice: 6
+Your ID: S2
+Pickup: VIT Bhopal | Destination: Bhopal Airport
+Date: 20-09-2026 | Start: 17:20 | End: 17:50
 
-Output:
-
-```
-Compatible rides:
-
-Ride ID     : R1
-Owner       : S1
-Route       : VIT Bhopal -> Bhopal Airport
-Date        : 2026-09-20
-Ride Time   : 17:00 - 17:30
-Common Time : 17:20 - 17:30
-Seats Left  : 2
+Match found
+R1 | VIT Bhopal -> Bhopal Airport | 20-09-2026 | 17:00-17:30 | 4 Seater | Seats: 3 | ACTIVE
+Driver: Aman
+Driver Contact: 9876543210
+Car: Swift
+Car No: MP09AB1234
+Common Time: 17:20 - 17:30
 ```
 
 ### 4. S2 joins the ride
 
 ```
-Choice: 6
-Ride ID: R1
-Your Student ID: S2
+Choice: 7
+Ride ID: R1 | Student ID: S2
 → Ride joined.
-```
 
-### 5. S1 marks the ride complete
+----- Ride Details -----
+Driver: Aman
+Driver Contact: 9876543210
+Car: Swift | Car No: MP09AB1234
+Car Type: 4 Seater | Seats Left: 2
 
-```
-Choice: 10
-Ride ID: R1
-Your Student ID (owner): S1
-→ Ride completed.
+----- Your Details -----
+ID: S2 | Name: Priya | Branch: ECE | Contact: 9876540002
+
+----- Ride Members -----
+Driver: Aman | Driver Contact: 9876543210
+Car: Swift | Car No: MP09AB1234
+Car Type: 4 Seater | Seats Left: 2
+Owner: Arjun | CSE | 9876540001
+Passengers:
+S2 | Priya | ECE | 9876540002
 ```
 
 ---
 
 ## Data Storage
 
-All data is saved to the `data/` folder automatically:
+Files are saved in the `data/` folder (created automatically):
 
 | File | Format per line |
 |------|----------------|
-| `students.txt` | `id\|name\|branch` |
-| `rides.txt` | `id\|ownerId\|pickup\|destination\|date\|startTime\|endTime\|seats\|status\|passenger1,passenger2,...` |
-
-The `data/` folder is created automatically when you first save. Data reloads on the next startup with no extra steps.
+| `students.txt` | `id\|name\|branch\|contact` |
+| `rides.txt` | `id\|owner\|pickup\|dest\|date\|start\|end\|driver\|driverContact\|car\|carNo\|carType\|totalSeats\|seats\|status\|p1,p2,...` |
 
 ---
 

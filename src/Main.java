@@ -1,45 +1,42 @@
 import java.io.IOException;
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.format.DateTimeParseException;
-import java.util.List;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Main {
 
     static Scanner sc = new Scanner(System.in);
-    static RideManager manager = new RideManager();
+    static Rides data = new Rides();
 
     public static void main(String[] args) {
 
-        loadData();
+        Data.load(data);
 
         while (true) {
 
-            System.out.println();
-            System.out.println("========== VITRIDE ==========");
-            System.out.println("1.  Add Student");
-            System.out.println("2.  View Students");
-            System.out.println("3.  Create Ride");
-            System.out.println("4.  View Rides");
-            System.out.println("5.  Find Ride Match");
-            System.out.println("6.  Join Ride");
-            System.out.println("7.  Leave Ride");
-            System.out.println("8.  View Passengers");
-            System.out.println("9.  Cancel Ride");
-            System.out.println("10. Complete Ride");
-            System.out.println("11. Remove Ride");
-            System.out.println("12. Save Data");
-            System.out.println("13. Exit");
-            System.out.println("==============================");
+            System.out.println("\n===== VITRIDE =====");
+            System.out.println("1. Add Student");
+            System.out.println("2. View Students");
+            System.out.println("3. Search Student");
+            System.out.println("4. Create Ride");
+            System.out.println("5. View Rides");
+            System.out.println("6. Find Ride Match");
+            System.out.println("7. Join Ride");
+            System.out.println("8. Leave Ride");
+            System.out.println("9. View Ride Members");
+            System.out.println("10. Cancel Ride");
+            System.out.println("11. Complete Ride");
+            System.out.println("12. Remove Ride");
+            System.out.println("13. Save");
+            System.out.println("14. Exit");
             System.out.print("Choice: ");
 
             try {
 
-                int choice =
-                        Integer.parseInt(sc.nextLine().trim());
+                int ch =
+                        Integer.parseInt(
+                                sc.nextLine());
 
-                switch (choice) {
+                switch (ch) {
 
                     case 1:
                         addStudent();
@@ -50,367 +47,524 @@ public class Main {
                         break;
 
                     case 3:
-                        createRide();
+                        searchStudent();
                         break;
 
                     case 4:
-                        viewRides();
+                        createRide();
                         break;
 
                     case 5:
-                        findMatch();
+                        viewRides();
                         break;
 
                     case 6:
-                        joinRide();
+                        findMatch();
                         break;
 
                     case 7:
-                        leaveRide();
+                        join();
                         break;
 
                     case 8:
-                        viewPassengers();
+                        leave();
                         break;
 
                     case 9:
-                        cancelRide();
+                        people();
                         break;
 
                     case 10:
-                        completeRide();
+                        cancel();
                         break;
 
                     case 11:
-                        removeRide();
+                        complete();
                         break;
 
                     case 12:
-                        saveData();
+                        remove();
                         break;
 
                     case 13:
-                        saveData();
+                        save();
+                        break;
+
+                    case 14:
+                        save();
                         System.out.println("Goodbye.");
                         return;
 
                     default:
                         System.out.println(
-                                "Invalid choice."
-                        );
+                                "Invalid choice.");
                 }
 
-            } catch (NumberFormatException |
-                     DateTimeParseException e) {
+            } catch (NumberFormatException e) {
 
                 System.out.println(
-                        "Enter a valid value."
-                );
+                        "Enter a number.");
 
-            } catch (InvalidRideException e) {
+            } catch (RideException e) {
 
                 System.out.println(
-                        "Error: " + e.getMessage()
-                );
+                        "Error: " +
+                        e.getMessage());
             }
         }
     }
 
     static void addStudent()
-            throws InvalidRideException {
+            throws RideException {
 
         System.out.print("Student ID: ");
-        String id = sc.nextLine().trim();
+        String id = sc.nextLine();
 
         System.out.print("Name: ");
-        String name = sc.nextLine().trim();
+        String name = sc.nextLine();
 
         System.out.print("Branch: ");
-        String branch = sc.nextLine().trim();
+        String branch = sc.nextLine();
 
-        manager.addStudent(
-                new Student(id, name, branch)
+        System.out.print("Contact: ");
+        String contact = sc.nextLine();
+
+        data.addStudent(
+                new Student(
+                        id,
+                        name,
+                        branch,
+                        contact
+                )
         );
 
-        saveData();
+        save();
 
-        System.out.println("Student added.");
+        System.out.println(
+                "Student added.");
     }
 
     static void viewStudents() {
 
-        if (manager.getStudents().isEmpty()) {
-            System.out.println("No students found.");
-            return;
-        }
+        for (Student s :
+                data.getStudents()) {
 
-        for (Student student :
-                manager.getStudents().values()) {
-
-            System.out.println(student);
+            s.show();
         }
     }
 
+    static void searchStudent() {
+
+        System.out.print(
+                "Student ID: ");
+
+        Student s =
+                data.findStudent(
+                        sc.nextLine());
+
+        if (s == null)
+            System.out.println(
+                    "Student not found.");
+        else
+            s.show();
+    }
+
     static void createRide()
-            throws InvalidRideException {
+            throws RideException {
 
         System.out.print("Ride ID: ");
-        String id = sc.nextLine().trim();
+        String id = sc.nextLine();
 
-        System.out.print("Owner Student ID: ");
-        String ownerId = sc.nextLine().trim();
+        System.out.print("Owner ID: ");
+        String owner = sc.nextLine();
 
         System.out.print("Pickup: ");
-        String pickup = sc.nextLine().trim();
+        String pickup = sc.nextLine();
 
         System.out.print("Destination: ");
-        String destination = sc.nextLine().trim();
+        String destination =
+                sc.nextLine();
 
-        System.out.print("Date (YYYY-MM-DD): ");
-        LocalDate date =
-                LocalDate.parse(sc.nextLine().trim());
+        System.out.print(
+                "Date (DD-MM-YYYY): ");
+        String date = sc.nextLine();
 
-        System.out.print("Start Time (HH:MM): ");
-        LocalTime start =
-                LocalTime.parse(sc.nextLine().trim());
+        System.out.print(
+                "Start (HH:MM): ");
+        String start = sc.nextLine();
 
-        System.out.print("End Time (HH:MM): ");
-        LocalTime end =
-                LocalTime.parse(sc.nextLine().trim());
+        System.out.print(
+                "End (HH:MM): ");
+        String end = sc.nextLine();
 
-        System.out.print("Available Passenger Seats: ");
-        int seats =
-                Integer.parseInt(sc.nextLine().trim());
+        System.out.print(
+                "Driver Name: ");
+        String driver = sc.nextLine();
 
-        manager.addRide(
+        System.out.print(
+                "Driver Contact: ");
+        String driverContact =
+                sc.nextLine();
+
+        System.out.print("Car: ");
+        String car = sc.nextLine();
+
+        System.out.print(
+                "Car No: ");
+        String carNumber =
+                sc.nextLine();
+
+        System.out.print(
+                "Car Type (4/6): ");
+
+        int totalSeats =
+                Integer.parseInt(
+                        sc.nextLine());
+
+        String carType;
+
+        if (totalSeats == 4)
+            carType = "4 Seater";
+        else if (totalSeats == 6)
+            carType = "6 Seater";
+        else
+            throw new RideException(
+                    "Only 4 or 6 seater is allowed.");
+
+        Ride r =
                 new Ride(
                         id,
-                        ownerId,
+                        owner,
                         pickup,
                         destination,
                         date,
                         start,
                         end,
-                        seats
-                )
-        );
+                        driver,
+                        driverContact,
+                        car,
+                        carNumber,
+                        carType,
+                        totalSeats
+                );
 
-        saveData();
+        data.addRide(r);
+        save();
 
-        System.out.println("Ride created.");
+        System.out.println(
+                "Ride created.");
+
+        System.out.println(
+                "Available student seats: " +
+                r.getSeats());
     }
 
     static void viewRides() {
 
-        if (manager.getRides().isEmpty()) {
-            System.out.println("No rides found.");
-            return;
-        }
+        for (Ride r :
+                data.getRides()) {
 
-        for (Ride ride : manager.getRides()) {
-            System.out.println(ride);
+            r.show();
         }
     }
 
     static void findMatch()
-            throws InvalidRideException {
+            throws RideException {
 
-        System.out.print("Your Student ID: ");
-        String studentId = sc.nextLine().trim();
+        System.out.print(
+                "Your ID: ");
 
-        if (manager.findStudent(studentId) == null) {
-            throw new InvalidRideException(
-                    "Student not found."
-            );
-        }
+        String id = sc.nextLine();
+
+        if (data.findStudent(id) == null)
+            throw new RideException(
+                    "Student not found.");
 
         System.out.print("Pickup: ");
-        String pickup = sc.nextLine().trim();
+        String pickup = sc.nextLine();
 
-        System.out.print("Destination: ");
-        String destination = sc.nextLine().trim();
+        System.out.print(
+                "Destination: ");
 
-        System.out.print("Date (YYYY-MM-DD): ");
-        LocalDate date =
-                LocalDate.parse(sc.nextLine().trim());
+        String destination =
+                sc.nextLine();
 
-        System.out.print("Your Start Time (HH:MM): ");
-        LocalTime start =
-                LocalTime.parse(sc.nextLine().trim());
+        System.out.print(
+                "Date (DD-MM-YYYY): ");
 
-        System.out.print("Your End Time (HH:MM): ");
-        LocalTime end =
-                LocalTime.parse(sc.nextLine().trim());
+        String date = sc.nextLine();
 
-        Ride searchRide =
+        System.out.print(
+                "Start (HH:MM): ");
+
+        String start = sc.nextLine();
+
+        System.out.print(
+                "End (HH:MM): ");
+
+        String end = sc.nextLine();
+
+        Ride wanted =
                 new Ride(
                         "SEARCH",
-                        studentId,
+                        id,
                         pickup,
                         destination,
                         date,
                         start,
                         end,
-                        1
+                        "",
+                        "",
+                        "",
+                        "",
+                        "4 Seater",
+                        4
                 );
 
-        List<Ride> matches =
-                manager.findMatches(
-                        studentId,
-                        date,
-                        pickup,
-                        destination,
-                        searchRide
-                );
+        ArrayList<Ride> result =
+                data.matches(wanted);
 
-        if (matches.isEmpty()) {
+        if (result.size() == 0) {
+
             System.out.println(
-                    "No compatible ride found."
-            );
+                    "No compatible ride found.");
+
             return;
         }
 
-        System.out.println("\nCompatible rides:");
+        for (Ride r : result) {
 
-        for (Ride ride : matches) {
+            System.out.println(
+                    "\nMatch found");
 
-            System.out.println();
+            r.show();
+
             System.out.println(
-                    "Ride ID     : " + ride.getId()
-            );
+                    "Driver: " +
+                    r.getDriver());
+
             System.out.println(
-                    "Owner       : " + ride.getOwnerId()
-            );
+                    "Driver Contact: " +
+                    r.getDriverContact());
+
             System.out.println(
-                    "Route       : " + ride.getPickup()
-                            + " -> " + ride.getDestination()
-            );
+                    "Car: " +
+                    r.getCar());
+
             System.out.println(
-                    "Date        : " + ride.getDate()
-            );
+                    "Car No: " +
+                    r.getCarNumber());
+
             System.out.println(
-                    "Ride Time   : " + ride.getStartTime()
-                            + " - " + ride.getEndTime()
-            );
-            System.out.println(
-                    "Common Time : " +
-                            RideMatcher.commonTime(
-                                    searchRide, ride
-                            )
-            );
-            System.out.println(
-                    "Seats Left  : " + ride.getSeats()
-            );
+                    "Common Time: " +
+                    Matcher.commonTime(
+                            wanted,
+                            r));
         }
     }
 
-    static void joinRide()
-            throws InvalidRideException {
+    static void join()
+            throws RideException {
 
-        System.out.print("Ride ID: ");
-        String rideId = sc.nextLine().trim();
+        System.out.print(
+                "Ride ID: ");
 
-        System.out.print("Your Student ID: ");
-        String studentId = sc.nextLine().trim();
+        String ride =
+                sc.nextLine();
 
-        manager.joinRide(rideId, studentId);
+        System.out.print(
+                "Student ID: ");
 
-        saveData();
+        String student =
+                sc.nextLine();
 
-        System.out.println("Ride joined.");
+        data.join(
+                ride,
+                student);
+
+        save();
+
+        Ride r =
+                data.findRide(ride);
+
+        Student s =
+                data.findStudent(student);
+
+        System.out.println(
+                "Ride joined.");
+
+        System.out.println(
+                "\n----- Ride Details -----");
+
+        System.out.println(
+                "Driver: " +
+                r.getDriver());
+
+        System.out.println(
+                "Driver Contact: " +
+                r.getDriverContact());
+
+        System.out.println(
+                "Car: " +
+                r.getCar());
+
+        System.out.println(
+                "Car No: " +
+                r.getCarNumber());
+
+        System.out.println(
+                "Car Type: " +
+                r.getCarType());
+
+        System.out.println(
+                "Seats Left: " +
+                r.getSeats());
+
+        System.out.println(
+                "\n----- Your Details -----");
+
+        System.out.println(
+                "ID: " +
+                s.getId());
+
+        System.out.println(
+                "Name: " +
+                s.getName());
+
+        System.out.println(
+                "Branch: " +
+                s.getBranch());
+
+        System.out.println(
+                "Contact: " +
+                s.getContact());
+
+        System.out.println(
+                "\n----- Ride Members -----");
+
+        data.showPeople(ride);
     }
 
-    static void leaveRide()
-            throws InvalidRideException {
+    static void leave()
+            throws RideException {
 
-        System.out.print("Ride ID: ");
-        String rideId = sc.nextLine().trim();
+        System.out.print(
+                "Ride ID: ");
 
-        System.out.print("Your Student ID: ");
-        String studentId = sc.nextLine().trim();
+        String ride =
+                sc.nextLine();
 
-        manager.leaveRide(rideId, studentId);
+        System.out.print(
+                "Student ID: ");
 
-        saveData();
+        String student =
+                sc.nextLine();
 
-        System.out.println("Ride left.");
+        data.leave(
+                ride,
+                student);
+
+        save();
+
+        System.out.println(
+                "Ride left.");
     }
 
-    static void viewPassengers()
-            throws InvalidRideException {
+    static void people()
+            throws RideException {
 
-        System.out.print("Ride ID: ");
-        String rideId = sc.nextLine().trim();
+        System.out.print(
+                "Ride ID: ");
 
-        manager.showPassengers(rideId);
+        data.showPeople(
+                sc.nextLine());
     }
 
-    static void cancelRide()
-            throws InvalidRideException {
+    static void cancel()
+            throws RideException {
 
-        System.out.print("Ride ID: ");
-        String rideId = sc.nextLine().trim();
+        System.out.print(
+                "Ride ID: ");
 
-        System.out.print("Your Student ID (owner): ");
-        String studentId = sc.nextLine().trim();
+        String ride =
+                sc.nextLine();
 
-        manager.cancelRide(rideId, studentId);
+        System.out.print(
+                "Owner ID: ");
 
-        saveData();
+        String owner =
+                sc.nextLine();
 
-        System.out.println("Ride cancelled.");
+        data.cancel(
+                ride,
+                owner);
+
+        save();
+
+        System.out.println(
+                "Ride cancelled.");
     }
 
-    static void completeRide()
-            throws InvalidRideException {
+    static void complete()
+            throws RideException {
 
-        System.out.print("Ride ID: ");
-        String rideId = sc.nextLine().trim();
+        System.out.print(
+                "Ride ID: ");
 
-        System.out.print("Your Student ID (owner): ");
-        String studentId = sc.nextLine().trim();
+        String ride =
+                sc.nextLine();
 
-        manager.completeRide(rideId, studentId);
+        System.out.print(
+                "Owner ID: ");
 
-        saveData();
+        String owner =
+                sc.nextLine();
 
-        System.out.println("Ride completed.");
+        data.complete(
+                ride,
+                owner);
+
+        save();
+
+        System.out.println(
+                "Ride completed.");
     }
 
-    static void removeRide()
-            throws InvalidRideException {
+    static void remove()
+            throws RideException {
 
-        System.out.print("Ride ID: ");
-        String rideId = sc.nextLine().trim();
+        System.out.print(
+                "Ride ID: ");
 
-        System.out.print("Your Student ID (owner): ");
-        String studentId = sc.nextLine().trim();
+        String ride =
+                sc.nextLine();
 
-        manager.removeRide(rideId, studentId);
+        System.out.print(
+                "Owner ID: ");
 
-        saveData();
+        String owner =
+                sc.nextLine();
 
-        System.out.println("Ride removed.");
+        data.remove(
+                ride,
+                owner);
+
+        save();
+
+        System.out.println(
+                "Ride removed.");
     }
 
-    static void saveData() {
+    static void save() {
 
         try {
-            FileManager.save(manager);
-            System.out.println("Data saved.");
+
+            Data.save(data);
+
         } catch (IOException e) {
-            System.out.println("Unable to save data.");
-        }
-    }
 
-    static void loadData() {
-
-        try {
-            FileManager.load(manager);
-        } catch (Exception e) {
             System.out.println(
-                    "Starting with empty data."
-            );
+                    "Could not save.");
         }
     }
 }

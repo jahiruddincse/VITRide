@@ -1,118 +1,93 @@
-import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.ArrayList;
-import java.util.List;
 
 public class Ride {
+    private String id, owner, pickup, destination, date, start, end;
+    private String driver, driverContact, car, carNumber, carType, status;
+    private int totalSeats, seats;
+    private ArrayList<String> people;
 
-    private String id;
-    private String ownerId;
-    private String pickup;
-    private String destination;
-    private LocalDate date;
-    private LocalTime startTime;
-    private LocalTime endTime;
-    private int seats;
-    private String status;
-    private ArrayList<String> passengers;
-
-    public Ride(String id, String ownerId, String pickup,
-                String destination, LocalDate date,
-                LocalTime startTime, LocalTime endTime,
-                int seats) {
+    public Ride(String id, String owner, String pickup, String destination,
+                String date, String start, String end, String driver,
+                String driverContact, String car, String carNumber,
+                String carType, int totalSeats) {
 
         this.id = id;
-        this.ownerId = ownerId;
+        this.owner = owner;
         this.pickup = pickup;
         this.destination = destination;
         this.date = date;
-        this.startTime = startTime;
-        this.endTime = endTime;
-        this.seats = seats;
+        this.start = start;
+        this.end = end;
+        this.driver = driver;
+        this.driverContact = driverContact;
+        this.car = car;
+        this.carNumber = carNumber;
+        this.carType = carType;
+        this.totalSeats = totalSeats;
+        this.seats = totalSeats - 1;
         this.status = "ACTIVE";
-        this.passengers = new ArrayList<>();
+        this.people = new ArrayList<String>();
     }
 
-    public Ride(String id, String ownerId, String pickup,
-                String destination, LocalDate date,
-                LocalTime startTime, LocalTime endTime,
-                int seats, String status,
-                ArrayList<String> passengers) {
+    public Ride(String id, String owner, String pickup, String destination,
+                String date, String start, String end, String driver,
+                String driverContact, String car, String carNumber,
+                String carType, int totalSeats, int seats,
+                String status, ArrayList<String> people) {
 
         this.id = id;
-        this.ownerId = ownerId;
+        this.owner = owner;
         this.pickup = pickup;
         this.destination = destination;
         this.date = date;
-        this.startTime = startTime;
-        this.endTime = endTime;
+        this.start = start;
+        this.end = end;
+        this.driver = driver;
+        this.driverContact = driverContact;
+        this.car = car;
+        this.carNumber = carNumber;
+        this.carType = carType;
+        this.totalSeats = totalSeats;
         this.seats = seats;
         this.status = status;
-        this.passengers = passengers;
+        this.people = people;
     }
 
-    public String getId() {
-        return id;
-    }
+    public String getId() { return id; }
+    public String getOwner() { return owner; }
+    public String getPickup() { return pickup; }
+    public String getDestination() { return destination; }
+    public String getDate() { return date; }
+    public String getStart() { return start; }
+    public String getEnd() { return end; }
+    public String getDriver() { return driver; }
+    public String getDriverContact() { return driverContact; }
+    public String getCar() { return car; }
+    public String getCarNumber() { return carNumber; }
+    public String getCarType() { return carType; }
+    public int getTotalSeats() { return totalSeats; }
+    public int getSeats() { return seats; }
+    public String getStatus() { return status; }
+    public ArrayList<String> getPeople() { return people; }
 
-    public String getOwnerId() {
-        return ownerId;
-    }
-
-    public String getPickup() {
-        return pickup;
-    }
-
-    public String getDestination() {
-        return destination;
-    }
-
-    public LocalDate getDate() {
-        return date;
-    }
-
-    public LocalTime getStartTime() {
-        return startTime;
-    }
-
-    public LocalTime getEndTime() {
-        return endTime;
-    }
-
-    public int getSeats() {
-        return seats;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public List<String> getPassengers() {
-        return passengers;
-    }
-
-    public void addPassenger(String studentId) {
-        passengers.add(studentId);
+    public void addPerson(String id) {
+        people.add(id);
         seats--;
     }
 
-    public void removePassenger(String studentId) {
-        if (passengers.remove(studentId)) {
-            seats++;
-        }
+    public void removePerson(String id) {
+        people.remove(id);
+        seats++;
     }
 
     public void setStatus(String status) {
         this.status = status;
     }
 
-    public String toString() {
-        return id +
-                " | " + pickup + " -> " + destination +
-                " | " + date +
-                " | " + startTime + "-" + endTime +
-                " | Seats: " + seats +
-                " | Owner: " + ownerId +
-                " | " + status;
+    public void show() {
+        System.out.println(id + " | " + pickup + " -> " + destination +
+                " | " + date + " | " + start + "-" + end +
+                " | " + carType + " | Seats: " + seats +
+                " | " + status);
     }
 }
