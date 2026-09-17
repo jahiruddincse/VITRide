@@ -8,119 +8,51 @@ public class MatcherTest {
     public static void main(String[] args)
             throws Exception {
 
-        Ride a =
-                new Ride(
-                        "R1",
-                        "S1",
-                        "VIT Bhopal",
-                        "Airport",
-                        "20-09-2026",
-                        "17:00",
-                        "17:30",
-                        "Aman",
-                        "9876543210",
-                        "Swift",
-                        "MP01AA1111",
-                        "4 Seater",
-                        4
-                );
+        Student s1 = new Student("Arjun", "VIT Bhopal", "Airport", "20-09-2026", "17:00");
+        Student s2 = new Student("Priya", "VIT Bhopal", "Airport", "20-09-2026", "17:20");
+        Student s3 = new Student("Rahul", "VIT Bhopal", "Airport", "20-09-2026", "18:00");
+        Student s4 = new Student("Sneha", "VIT Bhopal", "Station", "20-09-2026", "17:15");
+        Student s5 = new Student("Dev", "VIT Bhopal", "Airport", "21-09-2026", "17:10");
 
-        Ride b =
-                new Ride(
-                        "R2",
-                        "S2",
-                        "VIT Bhopal",
-                        "Airport",
-                        "20-09-2026",
-                        "17:20",
-                        "17:50",
-                        "Rahul",
-                        "9876543211",
-                        "Baleno",
-                        "MP01BB2222",
-                        "6 Seater",
-                        6
-                );
+        Ride r1 = new Ride("R1", "Arjun", "VIT Bhopal", "Airport", "20-09-2026", "17:00", 600);
 
+        // Test 1: S2 within 20 mins, same route and date -> match
         check(
-                Matcher.match(a, b),
-                "Overlap failed"
+                Matcher.match(s2, r1),
+                "Within 30 mins match failed"
         );
 
+        // Test 2: S3 is 60 mins away -> should not match
         check(
-                Matcher.commonTime(a, b)
-                        .equals(
-                                "17:20 - 17:30"),
-                "Common time failed"
+                !Matcher.match(s3, r1),
+                "Over 30 mins should not match"
         );
 
-        Ride c =
-                new Ride(
-                        "R3",
-                        "S3",
-                        "VIT Bhopal",
-                        "Airport",
-                        "20-09-2026",
-                        "18:00",
-                        "18:30",
-                        "A",
-                        "1",
-                        "WagonR",
-                        "MP01CC3333",
-                        "4 Seater",
-                        4
-                );
-
+        // Test 3: S4 has different destination -> should not match
         check(
-                !Matcher.match(a, c),
-                "Time failed"
+                !Matcher.match(s4, r1),
+                "Different destination should not match"
         );
 
-        Ride d =
-                new Ride(
-                        "R4",
-                        "S4",
-                        "VIT Bhopal",
-                        "Station",
-                        "20-09-2026",
-                        "17:20",
-                        "17:40",
-                        "D",
-                        "2",
-                        "Alto",
-                        "MP01DD4444",
-                        "4 Seater",
-                        4
-                );
-
+        // Test 4: S5 has different date -> should not match
         check(
-                !Matcher.match(a, d),
-                "Destination failed"
+                !Matcher.match(s5, r1),
+                "Different date should not match"
         );
 
-        Ride e =
-                new Ride(
-                        "R5",
-                        "S5",
-                        "VIT Bhopal",
-                        "Airport",
-                        "21-09-2026",
-                        "17:20",
-                        "17:40",
-                        "E",
-                        "3",
-                        "i10",
-                        "MP01EE5555",
-                        "4 Seater",
-                        4
-                );
-
+        // Test 5: Owner cannot match own ride
         check(
-                !Matcher.match(a, e),
-                "Date failed"
+                !Matcher.match(s1, r1),
+                "Owner should not match own ride"
         );
 
-        System.out.println(
-                "All tests passed.");
+        // Test 6: Fare split calculation
+        r1.addMember("Priya");
+        check(
+                r1.farePerPerson() == 300.0,
+                "Fare per person calculation failed"
+        );
+
+        System.out.println("All tests passed.");
     }
 }

@@ -1,6 +1,7 @@
 import java.util.ArrayList;
 
 public class Rides {
+
     private ArrayList<Student> students =
             new ArrayList<Student>();
 
@@ -15,44 +16,40 @@ public class Rides {
         return rides;
     }
 
-    public Student findStudent(String id) {
-        for (Student s : students)
-            if (s.getId().equalsIgnoreCase(id))
+    public Student findStudent(String name) {
+
+        for (Student s : students) {
+            if (s.getName()
+                    .equalsIgnoreCase(name))
                 return s;
+        }
 
         return null;
     }
 
     public Ride findRide(String id) {
-        for (Ride r : rides)
-            if (r.getId().equalsIgnoreCase(id))
+
+        for (Ride r : rides) {
+            if (r.getId()
+                    .equalsIgnoreCase(id))
                 return r;
+        }
 
         return null;
     }
 
-    public void addStudent(Student s) throws RideException {
-        if (s.getId().length() == 0 ||
-            s.getName().length() == 0 ||
-            s.getBranch().length() == 0 ||
-            s.getContact().length() == 0)
-            throw new RideException(
-                    "Student details cannot be empty.");
+    public void addStudent(Student s)
+            throws RideException {
 
-        if (findStudent(s.getId()) != null)
+        if (findStudent(s.getName()) != null)
             throw new RideException(
                     "Student already exists.");
 
         students.add(s);
     }
 
-    public void addRide(Ride r) throws RideException {
-        if (r.getId().length() == 0 ||
-            r.getOwner().length() == 0 ||
-            r.getPickup().length() == 0 ||
-            r.getDestination().length() == 0)
-            throw new RideException(
-                    "Ride details cannot be empty.");
+    public void addRide(Ride r)
+            throws RideException {
 
         if (findStudent(r.getOwner()) == null)
             throw new RideException(
@@ -62,65 +59,60 @@ public class Rides {
             throw new RideException(
                     "Ride already exists.");
 
-        if (r.getTotalSeats() != 4 &&
-            r.getTotalSeats() != 6)
+        if (r.getFare() <= 0)
             throw new RideException(
-                    "Only 4 or 6 seater is allowed.");
+                    "Invalid fare.");
 
-        if (Matcher.time(r.getStart()) >=
-            Matcher.time(r.getEnd()))
-            throw new RideException(
-                    "Invalid time range.");
+        Matcher.minutes(r.getTime());
 
         rides.add(r);
     }
 
-    public ArrayList<Ride> matches(Ride wanted)
+    public ArrayList<Ride> findMatches(
+            Student s)
             throws RideException {
 
         ArrayList<Ride> result =
                 new ArrayList<Ride>();
 
-        for (Ride r : rides)
-            if (Matcher.match(wanted, r))
+        for (Ride r : rides) {
+            if (Matcher.match(s, r))
                 result.add(r);
+        }
 
         return result;
     }
 
-    public void join(String rideId, String studentId)
+    public void join(
+            String rideId,
+            String name)
             throws RideException {
 
         Ride r = findRide(rideId);
+        Student s = findStudent(name);
 
         if (r == null)
             throw new RideException(
                     "Ride not found.");
 
-        if (findStudent(studentId) == null)
+        if (s == null)
             throw new RideException(
                     "Student not found.");
 
-        if (!r.getStatus().equals("ACTIVE"))
+        if (r.getMembers().contains(name))
             throw new RideException(
-                    "Ride is not active.");
+                    "Already in ride.");
 
-        if (r.getOwner().equalsIgnoreCase(studentId))
+        if (!Matcher.match(s, r))
             throw new RideException(
-                    "Owner cannot join.");
+                    "Student does not match.");
 
-        if (r.getSeats() <= 0)
-            throw new RideException(
-                    "Ride is full.");
-
-        if (r.getPeople().contains(studentId))
-            throw new RideException(
-                    "Already joined.");
-
-        r.addPerson(studentId);
+        r.addMember(name);
     }
 
-    public void leave(String rideId, String studentId)
+    public void leave(
+            String rideId,
+            String name)
             throws RideException {
 
         Ride r = findRide(rideId);
@@ -129,18 +121,20 @@ public class Rides {
             throw new RideException(
                     "Ride not found.");
 
-        if (!r.getPeople().contains(studentId))
+        if (name.equalsIgnoreCase(
+                r.getOwner()))
             throw new RideException(
-                    "Student not in ride.");
+                    "Owner cannot leave.");
 
-        if (!r.getStatus().equals("ACTIVE"))
+        if (!r.getMembers().contains(name))
             throw new RideException(
-                    "Ride is not active.");
+                    "Not in ride.");
 
-        r.removePerson(studentId);
+        r.removeMember(name);
     }
 
-    public void cancel(String rideId, String studentId)
+    public void showGroup(
+            String rideId)
             throws RideException {
 
         Ride r = findRide(rideId);
@@ -149,102 +143,22 @@ public class Rides {
             throw new RideException(
                     "Ride not found.");
 
-        if (!r.getOwner().equalsIgnoreCase(studentId))
-            throw new RideException(
-                    "Only owner can cancel.");
+        r.show();
 
-        if (!r.getStatus().equals("ACTIVE"))
-            throw new RideException(
-                    "Ride is already inactive.");
+        System.out.println("Members:");
 
-        r.setStatus("CANCELLED");
-    }
+        for (String name :
+                r.getMembers()) {
 
-    public void complete(String rideId, String studentId)
-            throws RideException {
-
-        Ride r = findRide(rideId);
-
-        if (r == null)
-            throw new RideException(
-                    "Ride not found.");
-
-        if (!r.getOwner().equalsIgnoreCase(studentId))
-            throw new RideException(
-                    "Only owner can complete.");
-
-        if (!r.getStatus().equals("ACTIVE"))
-            throw new RideException(
-                    "Ride is already inactive.");
-
-        r.setStatus("COMPLETED");
-    }
-
-    public void remove(String rideId, String studentId)
-            throws RideException {
-
-        Ride r = findRide(rideId);
-
-        if (r == null)
-            throw new RideException(
-                    "Ride not found.");
-
-        if (!r.getOwner().equalsIgnoreCase(studentId))
-            throw new RideException(
-                    "Only owner can remove.");
-
-        if (r.getPeople().size() > 0)
-            throw new RideException(
-                    "Ride has passengers.");
-
-        rides.remove(r);
-    }
-
-    public void showPeople(String rideId)
-            throws RideException {
-
-        Ride r = findRide(rideId);
-
-        if (r == null)
-            throw new RideException(
-                    "Ride not found.");
-
-        Student owner =
-                findStudent(r.getOwner());
-
-        System.out.println("\nDriver: " + r.getDriver());
-        System.out.println(
-                "Driver Contact: " + r.getDriverContact());
-
-        System.out.println("Car: " + r.getCar());
-        System.out.println(
-                "Car No: " + r.getCarNumber());
-
-        System.out.println(
-                "Car Type: " + r.getCarType());
-
-        System.out.println(
-                "Seats Left: " + r.getSeats());
-
-        if (owner != null)
-            System.out.println(
-                    "Owner: " +
-                    owner.getName() + " | " +
-                    owner.getBranch() + " | " +
-                    owner.getContact());
-
-        System.out.println("Passengers:");
-
-        if (r.getPeople().size() == 0) {
-            System.out.println("None");
-            return;
-        }
-
-        for (String id : r.getPeople()) {
-            Student s = findStudent(id);
+            Student s =
+                    findStudent(name);
 
             if (s != null)
                 s.show();
         }
+
+        System.out.println(
+                "Fare per person: " +
+                r.farePerPerson());
     }
 }

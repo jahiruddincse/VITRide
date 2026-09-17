@@ -1,93 +1,94 @@
 import java.util.ArrayList;
 
 public class Ride {
-    private String id, owner, pickup, destination, date, start, end;
-    private String driver, driverContact, car, carNumber, carType, status;
-    private int totalSeats, seats;
-    private ArrayList<String> people;
+    private String id, owner, location, destination, date, time;
+    private int fare;
+    private ArrayList<String> members;
 
-    public Ride(String id, String owner, String pickup, String destination,
-                String date, String start, String end, String driver,
-                String driverContact, String car, String carNumber,
-                String carType, int totalSeats) {
+    public Ride(String id, String owner, String location,
+                String destination, String date,
+                String time, int fare) {
 
         this.id = id;
         this.owner = owner;
-        this.pickup = pickup;
+        this.location = location;
         this.destination = destination;
         this.date = date;
-        this.start = start;
-        this.end = end;
-        this.driver = driver;
-        this.driverContact = driverContact;
-        this.car = car;
-        this.carNumber = carNumber;
-        this.carType = carType;
-        this.totalSeats = totalSeats;
-        this.seats = totalSeats - 1;
-        this.status = "ACTIVE";
-        this.people = new ArrayList<String>();
+        this.time = time;
+        this.fare = fare;
+
+        members = new ArrayList<String>();
+        members.add(owner);
     }
 
-    public Ride(String id, String owner, String pickup, String destination,
-                String date, String start, String end, String driver,
-                String driverContact, String car, String carNumber,
-                String carType, int totalSeats, int seats,
-                String status, ArrayList<String> people) {
+    public Ride(String id, String owner, String location,
+                String destination, String date,
+                String time, int fare,
+                ArrayList<String> members) {
 
         this.id = id;
         this.owner = owner;
-        this.pickup = pickup;
+        this.location = location;
         this.destination = destination;
         this.date = date;
-        this.start = start;
-        this.end = end;
-        this.driver = driver;
-        this.driverContact = driverContact;
-        this.car = car;
-        this.carNumber = carNumber;
-        this.carType = carType;
-        this.totalSeats = totalSeats;
-        this.seats = seats;
-        this.status = status;
-        this.people = people;
+        this.time = time;
+        this.fare = fare;
+        this.members = members;
     }
 
-    public String getId() { return id; }
-    public String getOwner() { return owner; }
-    public String getPickup() { return pickup; }
-    public String getDestination() { return destination; }
-    public String getDate() { return date; }
-    public String getStart() { return start; }
-    public String getEnd() { return end; }
-    public String getDriver() { return driver; }
-    public String getDriverContact() { return driverContact; }
-    public String getCar() { return car; }
-    public String getCarNumber() { return carNumber; }
-    public String getCarType() { return carType; }
-    public int getTotalSeats() { return totalSeats; }
-    public int getSeats() { return seats; }
-    public String getStatus() { return status; }
-    public ArrayList<String> getPeople() { return people; }
-
-    public void addPerson(String id) {
-        people.add(id);
-        seats--;
+    public String getId() {
+        return id;
     }
 
-    public void removePerson(String id) {
-        people.remove(id);
-        seats++;
+    public String getOwner() {
+        return owner;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public String getLocation() {
+        return location;
+    }
+
+    public String getDestination() {
+        return destination;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public String getTime() {
+        return time;
+    }
+
+    public int getFare() {
+        return fare;
+    }
+
+    public ArrayList<String> getMembers() {
+        return members;
+    }
+
+    public void addMember(String name) {
+        members.add(name);
+    }
+
+    public void removeMember(String name) {
+        members.remove(name);
+    }
+
+    public double farePerPerson() {
+        return (double) fare / members.size();
     }
 
     public void show() {
-        System.out.println(id + " | " + pickup + " -> " + destination +
-                " | " + date + " | " + start + "-" + end +
-                " | " + carType + " | Seats: " + seats +
-                " | " + status);
+        System.out.println(
+                id + " | " +
+                location + " -> " +
+                destination + " | " +
+                date + " | " +
+                time + " | Fare: " +
+                fare + " | Members: " +
+                members.size()
+        );
     }
 }
