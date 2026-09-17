@@ -16,10 +16,13 @@ When a compatible ride is found, the system displays the ride, driver, vehicle a
 
 ## Screenshots
 
-
 ### Screenshot 1 — Ride Matching
 
+**ADD SCREENSHOT HERE**
 
+*Figure 1: VITRide finding compatible rides using date, route and overlapping time.*
+
+---
 
 ### Screenshot 2 — Group Joining
 
@@ -52,6 +55,26 @@ Students travelling from VIT Bhopal to the same destination often arrange separa
 VITRide provides a simple command-line solution where students can register themselves, create rides, search for matching rides, join or leave rides, view ride members, and manage ride status.
 
 The main feature is the **time-window matching system**.
+
+---
+
+# Command-Line Executability & Environment Requirements
+
+This project is strictly developed as a **terminal-based Command-Line Interface (CLI)** application to comply with the VITyarthi project executability requirements:
+
+* **Fully Executable via Terminal:** The entire program runs directly within the user's terminal environment (macOS Terminal, Linux Bash, Windows Command Prompt / PowerShell).
+* **Zero GUI Dependencies:** It does not use AWT, Swing, or JavaFX. It runs reliably in headless automated evaluation environments and grading scripts without requiring a graphical display server.
+* **Zero Build Tools / Frameworks:** Does not require Maven, Gradle, IDE configurations, or external libraries. Standard `javac` and `java` commands are all that are needed.
+
+### System Prerequisites:
+* **Java Development Kit:** JDK 8, 11, 17, or 21 installed.
+* **Terminal:** Standard command-line terminal.
+
+Verify Java in your local terminal:
+```bash
+java -version
+javac -version
+```
 
 ---
 
@@ -131,17 +154,17 @@ The application does not require:
 
 ---
 
-# How to Run
+# How to Run in Your Local Terminal
 
 ## Step 1 — Clone the Repository
 
-Open Terminal and run:
+Open your local terminal and run:
 
 ```bash
 git clone https://github.com/jahiruddincse/VITRide.git
 ```
 
-Move into the project:
+Move into the project directory:
 
 ```bash
 cd VITRide
@@ -156,11 +179,11 @@ java -version
 javac -version
 ```
 
-Make sure Java 8 or newer is installed.
+Make sure Java 8 or newer is installed on your machine.
 
 ---
 
-## Step 3 — Compile the Project
+## Step 3 — Compile the Project from Terminal
 
 ```bash
 mkdir -p out
@@ -171,13 +194,13 @@ If there are no compiler errors, the project has compiled successfully.
 
 ---
 
-## Step 4 — Run the Application
+## Step 4 — Run the Application from Terminal
 
 ```bash
 java -cp out Main
 ```
 
-The application starts in the terminal.
+The application starts immediately inside your terminal window:
 
 ```text
 ===== VITRIDE =====
@@ -463,7 +486,7 @@ Only active rides are considered for matching.
 
 The project includes `MatcherTest.java`.
 
-Run:
+Run in your terminal:
 
 ```bash
 mkdir -p testout
@@ -630,6 +653,6 @@ The objective of VITRide is to provide a simple Java-based solution for helping 
 
 VIT Bhopal University
 
-Programming in Java
+Programming in Java (CSE1021)
 
 September 2026
