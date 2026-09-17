@@ -141,7 +141,7 @@ Result: NO MATCH
 
 ---
 
-## 💰 Fare Calculation
+##  Fare Calculation
 
 When multiple students share a ride, the fare is divided equally.
 
@@ -186,7 +186,7 @@ Fare per person = ₹600 / 3
 
 ---
 
-## 📁 Project Structure
+##  Project Structure
 
 ```text
 VITRide/
@@ -214,7 +214,7 @@ VITRide/
 
 ---
 
-## 🏗️ System Architecture
+##  System Architecture
 
 ```text
                 ┌────────────────────┐
