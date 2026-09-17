@@ -10,7 +10,7 @@ It matches rides using **pickup location, destination, date, and a 30-minute dep
 
 ### Main Menu
 
-![VITRide Main Menu](https://github.com/user-attachments/assets/1bee5735-b110-4cb0-8b8a-45ac55e7df3e)
+
 
 ### Ride Matching
 
