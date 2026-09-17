@@ -161,7 +161,7 @@ Fare per person = ₹600 / 3
 
 ---
 
-## 🛠️ Technologies Used
+##  Technologies Used
 
 | Technology         | Purpose                                     |
 | ------------------ | ------------------------------------------- |
