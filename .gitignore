@@ -1,0 +1,19 @@
+# Compiled output
+out/
+testout/
+*.class
+
+# Data files (auto-generated at runtime — do NOT ignore if you want to commit sample data)
+# Uncomment below to exclude data files from git:
+# data/students.txt
+# data/rides.txt
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE files
+.idea/
+*.iml
+.vscode/
+*.swp
