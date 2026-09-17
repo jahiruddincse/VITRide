@@ -73,39 +73,7 @@ The project demonstrates how **Object-Oriented Programming, collections, file ha
 ---
 ##  Screenshots
 
-Screenshots of the application can be added below.
 
-### Main Menu
-
-```text
-Add screenshot here
-```
-
-### Ride Creation
-
-```text
-Add screenshot here
-```
-
-### Ride Matching
-
-```text
-Add screenshot here
-```
-
-### Group & Fare Splitting
-
-```text
-Add screenshot here
-```
-
-### Testing
-
-```text
-Add screenshot here
-```
-
----
 
 ##  Matching Logic
 
