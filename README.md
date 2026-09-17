@@ -1,4 +1,4 @@
-# VITRide — Campus Cab-Sharing Matcher
+# VITRide : Campus Cab-Sharing and Fare-Splitting System
 
 **VITRide** is a terminal-based **Core Java application** designed to help students find and join shared cab rides with other students traveling along the same route.
 
@@ -501,11 +501,10 @@ Possible extensions include:
 
 ---
 
-## 📚 Academic Context
-**MD JAHIRUDDIN AHMED, 25BAI11468**
-**Course:** Programming in Java (CSE2006)
-**Institution:** VIT Bhopal University
-**Project:** VITRide — Campus Cab-Sharing Matcher
-**Year:** 2026
+##  Academic Context
+**MD JAHIRUDDIN AHMED
+Registration No.: 25BAI11468
+Course: Programming in Java (CSE2006)
+Institution: VIT Bhopal University**
 
 ---
