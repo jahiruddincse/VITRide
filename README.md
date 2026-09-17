@@ -502,9 +502,9 @@ Possible extensions include:
 ---
 
 ##  Academic Context
-**MD JAHIRUDDIN AHMED
-Registration No.: 25BAI11468
-Course: Programming in Java (CSE2006)
+**MD JAHIRUDDIN AHMED,
+Registration No.: 25BAI11468,
+Course: Programming in Java (CSE2006),
 Institution: VIT Bhopal University**
 
 ---
