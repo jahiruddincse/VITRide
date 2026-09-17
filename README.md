@@ -1,46 +1,89 @@
 # VITRide — Campus Cab-Sharing Matcher
 
-A simple, command-line Java application designed for VIT students to easily find and form shared cab groups to common destinations (Airport, Railway Station, Bhopal City), automatically calculating and splitting the fare evenly across members.
+A command-line Core Java application designed for university students to find co-passengers, form shared cab groups to common destinations (Airport, Railway Station, City), and split the total fare equally.
 
 ---
 
-## Problem Being Solved
+## 📸 Application Execution Screenshots
 
-VIT Bhopal students heading home or travelling to Bhopal Airport or Railway Stations often book individual cabs or struggle to coordinate rides manually. VITRide provides an intuitive command-line platform where:
-1. A student registers their travel route, date, and preferred time.
-2. A ride is posted with the estimated total fare.
-3. Other students with matching pickup, destination, date, and nearby departure time (within 30 minutes) can discover and join the group.
-4. Fare is divided evenly among all ride members automatically.
+> *Add your terminal execution screenshots here for evaluation.*
 
----
-
-## Main Features
-
-- **Add Student**: Register your name, location, destination, date, and time.
-- **Create Ride**: Form a shared ride for your journey with the total cab fare.
-- **View Rides**: See all active rides and member counts.
-- **Find Match**: Discovers rides going to the same destination on the same date within a 30-minute departure window. Displays time difference and split fare.
-- **Join Ride**: Join a matched ride group; displays all group members and updated split fare.
-- **View Group**: View all joined members and the current fare per person.
-- **Leave Ride**: Leave a shared ride before departure (owner cannot leave their created ride).
-- **Data Persistence**: Automatic file storage (`students.txt` and `rides.txt`) across sessions.
+### 1. Match Discovery & Fare Comparison (30-Minute Proximity Algorithm)
+```text
+[ INSERT SCREENSHOT HERE: Option 4 - Find Match output showing matched rides, time difference, and split fares ]
+```
+*Demonstrates the proximity algorithm finding active rides on the same route and date within a 30-minute departure difference.*
 
 ---
 
-## Technologies Used
-
-- **Java (JDK 8+)**: Core Java only, no external libraries.
-- **Collections**: `ArrayList` for storing students, rides, and group members.
-- **File I/O**: `BufferedReader` / `BufferedWriter` for lightweight file persistence in `data/`.
-- **Custom Exception**: `RideException` for structured input validation and business rules.
+### 2. Group Joining & Dynamic Fare Splitting
+```text
+[ INSERT SCREENSHOT HERE: Option 5 - Join Ride output showing member list and updated fare per person ]
+```
+*Demonstrates a student joining a ride group, dynamically reducing the fare per person (e.g., from ₹300 to ₹200).*
 
 ---
 
-## Required Java Version
+### 3. Compilation & Automated Unit Tests Passing
+```text
+[ INSERT SCREENSHOT HERE: Terminal output running tests with "All tests passed." ]
+```
+*Demonstrates clean compilation with zero warnings and 100% automated test suite pass rate.*
 
-Java 8 or higher.
+---
 
-Verify your environment:
+## 🚀 Quick Start — How to Run
+
+### Step 1: Clone the Repository
+```bash
+git clone https://github.com/jahiruddincse/VITRide.git
+cd VITRide
+```
+
+### Step 2: Compile the Project
+```bash
+mkdir -p out
+javac -d out src/*.java
+```
+
+### Step 3: Run the Application
+```bash
+java -cp out Main
+```
+
+### Step 4: Run Automated Tests
+```bash
+mkdir -p testout
+javac -d testout src/*.java tests/MatcherTest.java
+java -cp testout MatcherTest
+```
+Expected output:
+```text
+All tests passed.
+```
+
+---
+
+## 📖 Problem Being Solved
+
+Students studying at residential campuses like VIT Bhopal regularly travel to transit hubs (such as Bhopal Airport and Rani Kamlapati / Bhopal Railway Station) during weekends, holidays, and semester breaks. Individually booking cabs leads to higher travel costs and uncoordinated journeys. 
+
+**VITRide** provides a structured, terminal-based platform where:
+1. Students register their origin, destination, date, and preferred departure time.
+2. A student creates a shared ride with an estimated total fare.
+3. Other students with matching routes and a nearby start time (within a 30-minute window) can discover and join the ride.
+4. Total cab fare is dynamically divided equally among all joined members.
+
+---
+
+## 🛠️ System Requirements & Environment Setup
+
+- **Operating System:** macOS, Windows 10/11, or Linux.
+- **Java Development Kit (JDK):** JDK 8 or higher (JDK 11 / JDK 17 / JDK 21 recommended).
+- **Dependencies:** None (Pure Core Java — uses only standard Java libraries).
+- **Build / Packaging Tool:** None required; runs directly using standard `javac` and `java` commands.
+
+### Verify Java Installation:
 ```bash
 java -version
 javac -version
@@ -48,33 +91,51 @@ javac -version
 
 ---
 
-## Setup and Installation
+## 📂 Project Structure
 
-```bash
-git clone https://github.com/jahiruddincse/VITRide.git
-cd VITRide
+```text
+VITRide/
+├── README.md              # Project documentation and setup guide
+├── statement.md           # Problem statement and scope
+├── .gitignore             # Git ignore rules for build artifacts
+├── src/
+│   ├── Main.java          # CLI entry point and menu interaction
+│   ├── Student.java       # Student entity (name, location, destination, date, time)
+│   ├── Ride.java          # Ride entity (route, time, fare, member list)
+│   ├── Matcher.java       # Time-window proximity matching algorithm
+│   ├── Rides.java         # Business logic manager for all ride operations
+│   ├── Data.java          # File persistence layer using BufferedReader/Writer
+│   └── RideException.java # Custom checked exception for input & business validation
+├── tests/
+│   └── MatcherTest.java   # Automated unit tests covering all edge cases
+└── data/
+    ├── students.txt       # Local persistent storage for registered students
+    └── rides.txt          # Local persistent storage for rides and members
 ```
 
 ---
 
-## How to Compile
+## ⚙️ Core Matching & Fare-Splitting Logic
 
-From the root `VITRide/` directory:
+1. **Route & Date Matching:**
+   - Pickup location and destination must match (case-insensitive).
+   - Date must match exactly (`DD-MM-YYYY`).
 
-```bash
-mkdir -p out
-javac -d out src/*.java
-```
+2. **Time-Proximity Window ($\le 30$ Minutes):**
+   - Departure time format `HH:MM` is converted into absolute minutes from midnight:
+     $$\text{minutes} = (\text{hour} \times 60) + \text{minute}$$
+   - The absolute difference between rider time and ride start time must satisfy:
+     $$|\text{studentTime} - \text{rideTime}| \le 30 \text{ minutes}$$
+
+3. **Equal Fare Division:**
+   $$\text{Fare per person} = \frac{\text{Total Fare}}{\text{Total Joined Members}}$$
 
 ---
 
-## How to Run
+## 🎮 Interactive Menu Walkthrough
 
-```bash
-java -cp out Main
-```
+When running `java -cp out Main`, you will see:
 
-Menu options:
 ```text
 ===== VITRIDE =====
 1. Add Student
@@ -85,76 +146,38 @@ Menu options:
 6. View Group
 7. Leave Ride
 8. Exit
-Choice:
+Choice: 
 ```
 
----
+### Step-by-Step Usage Example:
 
-## How to Test
+1. **Add Students (Option 1):**
+   - Student 1: `Arjun`, Location: `VIT Bhopal`, Going To: `Airport`, Date: `20-09-2026`, Time: `17:00`
+   - Student 2: `Palak`, Location: `VIT Bhopal`, Going To: `Airport`, Date: `20-09-2026`, Time: `17:20`
 
-```bash
-mkdir -p testout
-javac -d testout src/*.java tests/MatcherTest.java
-java -cp testout MatcherTest
-```
-
-Expected output:
-```text
-All tests passed.
-```
-
----
-
-## Project Structure
-
-```text
-VITRide/
-├── README.md
-├── statement.md
-├── .gitignore
-├── src/
-│   ├── Main.java           # Entry point and interactive menu
-│   ├── Student.java        # Student entity (name, location, destination, date, time)
-│   ├── Ride.java           # Ride entity (route, time, fare, members list)
-│   ├── Matcher.java        # 30-minute window matching algorithm
-│   ├── Rides.java          # Operations and collections manager
-│   ├── Data.java           # Local file storage (load/save)
-│   └── RideException.java  # Custom checked exception
-├── tests/
-│   └── MatcherTest.java    # Automated unit tests
-└── data/                   # Auto-generated persistence storage
-    ├── students.txt
-    └── rides.txt
-```
-
----
-
-## Matching Logic & Fare Splitting
-
-1. **Route & Date Matching**: Pickup location and destination must match (case-insensitive), and the date must match exactly.
-2. **Time Window (±30 Minutes)**: Time format `HH:MM` is converted into total minutes from midnight. The absolute difference between student start time and ride start time must be $\le 30$ minutes.
-3. **Fare Splitting**:
-   $$\text{Fare per person} = \frac{\text{Total Fare}}{\text{Number of Members}}$$
-
----
-
-## Example Walkthrough
-
-1. **Add Student**:
-   - Name: `Arjun`, Location: `VIT Bhopal`, Going To: `Airport`, Date: `20-09-2026`, Time: `17:00`
-2. **Create Ride**:
+2. **Create Ride (Option 2):**
    - Ride ID: `R1`, Name: `Arjun`, Total Fare: `600`
-3. **Add Another Student**:
-   - Name: `Priya`, Location: `VIT Bhopal`, Going To: `Airport`, Date: `20-09-2026`, Time: `17:20`
-4. **Find Match**:
-   - Priya finds Ride `R1` (Time diff: 20 minutes, Fare per person: ₹300.0)
-5. **Join Ride**:
-   - Priya joins `R1`. Both Arjun and Priya are listed as group members, sharing the fare equally (₹300 each).
+   - Initial state: 1 member (Arjun), Fare per person = ₹600.0.
+
+3. **Find Match (Option 4):**
+   - Palak searches for rides.
+   - The system detects `R1` with a **20-minute difference** and recommends joining with a projected fare of ₹300.0.
+
+4. **Join Ride (Option 5):**
+   - Palak enters Ride ID `R1`.
+   - Both members are listed and the fare per person automatically updates to **₹300.0**.
+
+5. **Leave Ride (Option 7):**
+   - Any passenger can leave before departure; the fare splits back across remaining members.
+
+6. **Exit & Persist (Option 8):**
+   - All data is flushed to `data/students.txt` and `data/rides.txt`, reloading automatically upon restart.
 
 ---
 
-## Author
+## 👤 Author Information
 
-Md Jahiruddin Ahmed  
-VIT Bhopal University — Programming in Java (CSE1021)  
-September 2026
+- **Student Name:** Md Jahiruddin Ahmed
+- **Course:** Programming in Java (CSE1021)
+- **Institution:** VIT Bhopal University
+- **Submission Date:** September 2026
