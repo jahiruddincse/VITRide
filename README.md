@@ -1,232 +1,165 @@
-**VITRide** is a command-line Java application for VIT students to find and share rides to common destinations. It matches students based on **pickup location, destination, date, and overlapping travel time**.
+# VITRide — Campus Cab-Sharing Matcher
 
-The system also manages ride seats, passengers, driver details, car details, and local data storage.
+VITRide is a **terminal-based Core Java application** that helps students find co-passengers and form shared cab groups for common destinations.
+
+It matches rides using **pickup location, destination, date, and a 30-minute departure time window**, with automatic equal fare splitting among group members.
+
+---
+
+## Screenshots
+
+### Main Menu
+
+![VITRide Main Menu](https://github.com/user-attachments/assets/1bee5735-b110-4cb0-8b8a-45ac55e7df3e)
+
+### Ride Matching
+
+**ADD SCREENSHOT HERE**
+
+### Group Joining & Fare Splitting
+
+**ADD SCREENSHOT HERE**
+
+### Testing
+
+**ADD SCREENSHOT HERE**
 
 ---
 
 ## Features
 
-* Student registration and search
-* Create and view rides
-* Match rides using route, date, and time-window overlap
-* Calculate common available travel time
-* Join and leave rides
-* Automatic seat management
-* View ride members and driver/car details
-* Cancel, complete, and remove rides
-* Local file-based data persistence
+* Student registration
+* Ride creation and viewing
+* Ride matching by route, date, and time
+* Join and leave shared rides
+* Automatic fare division
+* Group member viewing
+* Local data persistence
 
 ---
 
-## SCREENSHOTS
+## Technologies
 
----
-
-## Technologies Used
-
-* Java
-* Object-Oriented Programming
+* Java (JDK 8+)
+* OOP
 * `ArrayList`
 * `Scanner`
 * Exception Handling
-* File Handling (`BufferedReader`, `BufferedWriter`)
-* Basic time parsing and interval calculation
+* File Handling
 * Git and GitHub
 
-**External dependencies:** None
-
-**Database:** Not required
-
-**GUI:** Not required
+**External dependencies:** None  
+**Database:** None  
+**GUI:** None  
 
 ---
 
-# Setup and Execution
+## Setup & Execution
 
-## 1. Requirements
+### 1. Requirements
 
 Install **JDK 8 or newer**.
 
-Verify the installation:
-
 ```bash
 java -version
 javac -version
 ```
 
-The project can run on macOS, Linux, or Windows using a standard terminal.
-
-### macOS
-
-If Java is installed but `java` or `javac` is not available in the terminal:
-
-```bash
-export JAVA_HOME=$(/usr/libexec/java_home)
-export PATH="$JAVA_HOME/bin:$PATH"
-```
-
-Then verify again:
-
-```bash
-java -version
-javac -version
-```
-
----
-
-## 2. Clone the Repository
-
-Run:
+### 2. Clone
 
 ```bash
 git clone https://github.com/jahiruddincse/VITRide.git
-```
-
-Then enter the project directory:
-
-```bash
 cd VITRide
 ```
 
----
+### 3. Dependencies & Configuration
 
-## 3. Dependencies and Configuration
+No external libraries, database, framework, build tool, or configuration file is required.
 
-VITRide uses only standard Java libraries.
+The application uses the local `data/` directory for storage.
 
-**No additional dependency installation is required.**
-
-There is also **no configuration file, database, framework, or environment variable required** to run the application.
-
-At runtime, the program uses the local `data/` directory for storing student and ride information.
-
----
-
-## 4. Compile the Project
-
-From the `VITRide` folder:
+### 4. Compile
 
 ```bash
 mkdir -p out
 javac -d out src/*.java
 ```
 
-If no error is displayed, compilation was successful.
-
----
-
-## 5. Run the Project
+### 5. Run
 
 ```bash
 java -cp out Main
 ```
 
-The application starts directly in the terminal.
-
-Example menu:
+The application runs completely through the terminal.
 
 ```text
 ===== VITRIDE =====
 1. Add Student
-2. View Students
-3. Search Student
-4. Create Ride
-5. View Rides
-6. Find Ride Match
-7. Join Ride
-8. Leave Ride
-9. View Ride Members
-10. Cancel Ride
-11. Complete Ride
-12. Remove Ride
-13. Save
-14. Exit
+2. Create Ride
+3. View Rides
+4. Find Match
+5. Join Ride
+6. View Group
+7. Leave Ride
+8. Exit
 Choice:
 ```
 
-The complete application can be operated through terminal input. No IDE or GUI is required.
-
 ---
 
-# Testing
+## Testing
 
-VITRide includes a test class for the ride-matching algorithm.
-
-## Compile Tests
+Compile and run the test:
 
 ```bash
 mkdir -p testout
 javac -d testout src/*.java tests/MatcherTest.java
-```
-
-## Run Tests
-
-```bash
 java -cp testout MatcherTest
 ```
 
-Expected output:
+Expected:
 
 ```text
 All tests passed.
 ```
 
-The test covers:
-
-* Overlapping time windows
-* Common-time calculation
-* Non-overlapping time windows
-* Different destinations
-* Different dates
+The tests cover ride matching, time difference, destination/date checks, and fare calculation.
 
 ---
 
-# Matching Logic
+## Matching Logic
 
-A ride is considered compatible when:
-
-* The date is the same
-* Pickup location is the same
-* Destination is the same
-* Both rides are active
-* A seat is available
-* The users are different
-* Their travel time windows overlap
-
-The common time is calculated using:
+A ride matches when the pickup, destination, and date are the same, the users are different, and the departure-time difference is within **30 minutes**.
 
 ```text
-common start = later start time
-common end   = earlier end time
+minutes = (hours × 60) + minutes
+diff = |student_time - ride_time|
+
+match = diff <= 30
 ```
 
-A match exists when the common start time is earlier than the common end time.
-
-Example:
+Fare is divided equally:
 
 ```text
-Ride 1: 17:00 - 17:30
-Ride 2: 17:20 - 17:50
-
-Common time: 17:20 - 17:30
+fare per person = total fare / number of members
 ```
 
 ---
 
-# Data Storage
-
-The application stores data locally in:
+## Data Storage
 
 ```text
-data/students.txt
-data/rides.txt
+data/
+├── students.txt
+└── rides.txt
 ```
 
-Previously saved data is loaded when the application starts.
+Saved data is loaded automatically when the application starts.
 
 ---
 
-# Project Structure
+## Project Structure
 
 ```text
 VITRide/
@@ -244,17 +177,26 @@ VITRide/
 ├── tests/
 │   └── MatcherTest.java
 └── data/
-    ├── students.txt
-    └── rides.txt
 ```
 
 ---
 
-# Command-Line Executability
+## Command-Line Execution
 
-VITRide is designed to be completely executable from a terminal using standard Java commands:
+VITRide is fully executable from a terminal using:
 
 ```bash
 javac -d out src/*.java
 java -cp out Main
 ```
+
+No GUI or IDE is required.
+
+---
+
+## Author
+
+**Md Jahiruddin Ahmed**  
+Programming in Java (CSE2006)  
+VIT Bhopal University  
+September 2026
