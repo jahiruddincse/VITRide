@@ -620,7 +620,8 @@ public class RideException extends Exception {
 The screenshots below show the application running in the terminal and demonstrate the core features:
 
 ### 10.1 Interactive Main Menu
-![VITRide Main Menu](https://github.com/user-attachments/assets/1bee5735-b110-4cb0-8b8a-45ac55e7df3e)
+<img width="776" height="359" alt="Screenshot 2026-09-18 at 1 03 24 PM" src="https://github.com/user-attachments/assets/77b89f84-cbe2-489e-88c2-fcb2b8e07ac2" />
+
 *Result 1: Main menu interface offering options 1 through 8.*
 
 ---
